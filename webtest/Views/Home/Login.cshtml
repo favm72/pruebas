@@ -1,0 +1,25 @@
+﻿@model webtest.Models.Login
+@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (Request.HttpMethod == "POST")
+{
+    <script>
+        window.onload = function () {
+            var path = '@Url.Action("Login", "Home", null)';
+            window.history.pushState({ urlPath: path }, "", path);
+        }
+    </script>
+}
+<h2>Login</h2>
+@using (Html.BeginForm())
+{
+    @Html.LabelFor(x => x.CUSUARIO)
+    @Html.TextBoxFor(x => x.CUSUARIO)
+    @Html.LabelFor(x => x.WCOD_LINEA_NEGOCIO)
+    @Html.TextBoxFor(x => x.WCOD_LINEA_NEGOCIO)
+    @Html.LabelFor(x => x.WCOD_TIPO_PERSONA)
+    @Html.TextBoxFor(x => x.WCOD_TIPO_PERSONA)
+    <button type="submit">Entrar</button>
+}

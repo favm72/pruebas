@@ -1,0 +1,17 @@
+.vs/*
+/myapi/Web.Release.config
+/example/bin
+/example/obj/Debug
+/example/Web.Debug.config
+/example/Web.Release.config
+/myapi/bin
+/myapi/obj/Debug
+/myapi/Web.Debug.config
+/packages
+/prueba/bin
+/pruebau/bin/Debug
+/pruebau/obj/Debug
+/pruebavb/bin/Debug
+/pruebavb/obj/Debug
+/webtest/bin
+/webtest/obj/Debug
