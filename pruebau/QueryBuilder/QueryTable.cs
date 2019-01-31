@@ -18,11 +18,11 @@ namespace pruebau.QueryBuilder
             string result = "";
             if (Name != null)
             {
-                result = $" {Name} as {Alias} ";                
+                result = $" {Name} as {Alias ?? Name} ";                
             }
             else
             {
-                result = $"({GetQuery()}) as {Alias}";
+                result = $"({GetQuery()}) as {Alias ?? Name}";
             }
             return result;
         }
@@ -34,16 +34,19 @@ namespace pruebau.QueryBuilder
                 result = "select ";
                 result += string.Join(" , ", SelectClause.Select(x => x.GetQuery()));
                 result += $" from {Name} as {Alias} ";
-                result += string.Join(" , ", FromClause.Select(x => $"{x.Name} as [{x.Alias}]"));
-                result += " " + WhereClause.GetQuery();
+                if (FromClause != null)
+                    result += string.Join(" , ", FromClause.Select(x => $"{x.Name} as [{x.Alias ?? x.Name}]"));
+                if (WhereClause != null)
+                    result += " " + WhereClause.GetQuery();
             }
             else
             {
                 result = "select ";
                 result += string.Join(" , ", SelectClause.Select(x => x.GetQuery()));
                 result += $" from " + string.Join(" , ", FromClause.Select(x => x.GetQueryFrom())); ;
-                result += string.Join(" , ", FromClause.Select(x => $"{x.Name} as [{x.Alias}]"));
-                result += " " + WhereClause.GetQuery();
+                result += string.Join(" , ", FromClause.Select(x => $"{x.Name} as [{x.Alias ?? x.Name}]"));
+                if (WhereClause != null)
+                    result += " " + WhereClause.GetQuery();
             }
             return result;
         } 

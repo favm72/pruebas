@@ -1,0 +1,4 @@
+﻿{"glosas": [
+	{ "key":"saludo", "value":"hola como estás" },
+	{ "key":"despedida", "value":"adiós" }
+]}
