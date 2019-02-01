@@ -135,15 +135,10 @@ namespace pruebau
         [TestMethod]
         public void TestMethod11()
         {
-            string sql = Model.Entities.AsQueryTable<Model.Entities.ALUMNO>().GetQuery();
-            var lista = Model.Conecta.Obtener<Model.Entities.ALUMNO>(sql, dr => {
-                var alumno = new Model.Entities.ALUMNO();
-                alumno.ID = (int)dr["ID"];
-                alumno.EDAD = (int)dr["EDAD"];
-                alumno.FECHA_NAC = (DateTime)dr["FECHA_NAC"];
-                alumno.NOMBRE = (string)dr["NOMBRE"];
-                return alumno;
-            });
+            var alumno = Model.Entities.AsQuery<Model.Entities.ALUMNO>();
+            var lista = Model.Conecta.Obtener<Model.Entities.ALUMNO>(alumno);
+            Model.Entities.ALUMNO x = new Model.Entities.ALUMNO();
+            
             Assert.AreEqual(null, null);
         }
     }

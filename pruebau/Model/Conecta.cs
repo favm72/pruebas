@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using static pruebau.Model.Entities;
 
 namespace pruebau.Model
 {
@@ -39,21 +41,43 @@ namespace pruebau.Model
                 }
             });
         }
-        public static List<T> Obtener<T>(string query, Func<SqlDataReader,T> mapper)
+        public static List<T> Obtener<T>(QueryBuilder.Query query) where T : new()
         {
             List<T> result = new List<T>();
             Conectar(con => {               
-                var cmd = new SqlCommand(query, con);
+                var cmd = new SqlCommand(query.GetQuery(), con);
                 cmd.CommandType = System.Data.CommandType.Text;
                 using (SqlDataReader dr = cmd.ExecuteReader())
                 {
                     while (dr.HasRows && dr.Read())
                     {
-                        T obj = mapper(dr);
+                        T obj = Mapper<T>(dr, query.SelectClause);
                         result.Add(obj);
                     }
                 }                
             });
+            return result;
+        }
+
+        public static T Mapper<T>(SqlDataReader dr, List<QueryBuilder.QueryElement> stmnt) where T : new()
+        {          
+            T result = new T();
+            Type tipo = typeof(T);
+            PropertyInfo[] props = tipo.GetProperties();
+            if (props != null)
+            {
+                foreach (PropertyInfo item in props)
+                {
+                    if (item.IsDefined(typeof(Member), true))
+                    {
+                        object[] attrs = item.GetCustomAttributes(true);
+                        var mbr = attrs.Where(x => typeof(Member) == x.GetType()).FirstOrDefault() as Member;
+                        string alias = stmnt.Where(x => x.Name == item.Name).Select(x => x.Alias).FirstOrDefault();
+                        
+                        item.SetValue(result, dr[alias]);                        
+                    }
+                }
+            }
             return result;
         }
     }

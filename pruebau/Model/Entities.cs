@@ -9,9 +9,9 @@ namespace pruebau.Model
 {
     public class Entities
     {
-        public static QueryTable AsQueryTable<T>()
+        public static Query AsQuery<T>()
         {
-            QueryTable result = new QueryTable();
+            Query result = new Query();
             result.SelectClause = new List<QueryElement>(); 
             var tipo = typeof(T);
             result.Name = tipo.Name;
@@ -22,11 +22,12 @@ namespace pruebau.Model
                 foreach (System.Reflection.PropertyInfo item in props)
                 {
                     if (item.IsDefined(typeof(Member), true))
-                        result.SelectClause.Add(new QueryElement() { Name = item.Name, Alias = item.Name });                    
+                        result.SelectClause.Add(new QueryElement() { Name = item.Name, Alias = item.Name });                  
                 }
             }
             return result;        
         }
+        
         public class Member : Attribute
         {            
             public bool PrimaryKey { get; set; }
@@ -47,6 +48,31 @@ namespace pruebau.Model
             public DateTime FECHA_NAC { get; set; }
             [Member]
             public int EDAD { get; set; }
+
+            public Field id
+            {
+                get
+                {
+                    return new Field("ID", true, true);
+                }
+            }
+
+          
+        }
+    }
+
+    public class Field
+    {
+        public bool PrimaryKey { get; set; }
+        public bool Nullable { get; set; }
+        public string Name { get; set; }
+        public object Value { get; set; }
+
+        public Field(string Name, bool PrimaryKey = false, bool Nullable = true)
+        {
+            this.Name = Name;
+            this.PrimaryKey = PrimaryKey;
+            this.Nullable = Nullable;
         }
     }
 }

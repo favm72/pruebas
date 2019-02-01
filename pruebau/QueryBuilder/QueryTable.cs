@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace pruebau.QueryBuilder
 {
-    public class QueryTable
+    public class Query
     {
         public List<QueryElement> SelectClause { get; set; }
-        public List<QueryTable> FromClause { get; set; }
+        public List<Query> FromClause { get; set; }
         public QueryStatement WhereClause { get; set; }
         public string Alias { get; set; }
         public string Name { get; set; }
