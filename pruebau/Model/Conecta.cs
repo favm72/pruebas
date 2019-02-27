@@ -58,7 +58,7 @@ namespace pruebau.Model
             });
             return result;
         }
-
+        // comentario de la rama prueba
         public static T Mapper<T>(SqlDataReader dr, List<QueryBuilder.QueryElement> stmnt) where T : new()
         {          
             T result = new T();
