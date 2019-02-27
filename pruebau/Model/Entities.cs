@@ -9,10 +9,26 @@ namespace pruebau.Model
 {
     public class Entities
     {
+        public class Entity
+        {
+            public string Name { get; set; }
+            public List<Field> props { get; set; }
+            public Query AsQuery()
+            {
+                Query result = new Query();
+                result.Select = new List<QueryElement>();
+                result.PreSelect = new List<QueryElement>();
+                result.Name = Name;
+                if (props != null)             
+                    foreach (Field item in props)
+                        result.PreSelect.Add(new QueryElement() { Name = item.Name, Alias = item.Name });
+                return result;
+            }
+        }
         public static Query AsQuery<T>()
         {
             Query result = new Query();
-            result.SelectClause = new List<QueryElement>(); 
+            result.Select = new List<QueryElement>();
             var tipo = typeof(T);
             result.Name = tipo.Name;
             result.Alias = tipo.Name;
@@ -22,7 +38,7 @@ namespace pruebau.Model
                 foreach (System.Reflection.PropertyInfo item in props)
                 {
                     if (item.IsDefined(typeof(Member), true))
-                        result.SelectClause.Add(new QueryElement() { Name = item.Name, Alias = item.Name });                  
+                        result.Select.Add(new QueryElement() { Name = item.Name, Alias = item.Name });                  
                 }
             }
             return result;        
@@ -38,8 +54,21 @@ namespace pruebau.Model
                 this.Nullable = Nullable;
             }            
         }
-        public class ALUMNO
+        public class ALUMNO : Entity
         {
+            public ALUMNO()
+            {
+                Name = "ALUMNO";
+                props.Add(new Field("ID", true, true));
+                props.Add(new Field("NOMBRE"));
+                props.Add(new Field("FECHA_NAC"));
+                props.Add(new Field("EDAD"));
+            }
+            public Field ID { get { return props.FirstOrDefault(x => x.Name == "ID"); } }
+            public Field NOMBRE { get { return props.FirstOrDefault(x => x.Name == "NOMBRE"); } }
+            public Field FECHA_NAC { get { return props.FirstOrDefault(x => x.Name == "FECHA_NAC"); } }
+            public Field EDAD { get { return props.FirstOrDefault(x => x.Name == "EDAD"); } }
+            /*
             [Member(PrimaryKey: true, Nullable: false)]
             public int ID { get; set; }
             [Member]
@@ -55,9 +84,7 @@ namespace pruebau.Model
                 {
                     return new Field("ID", true, true);
                 }
-            }
-
-          
+            }*/
         }
     }
 

@@ -51,7 +51,7 @@ namespace pruebau.Model
                 {
                     while (dr.HasRows && dr.Read())
                     {
-                        T obj = Mapper<T>(dr, query.SelectClause);
+                        T obj = Mapper<T>(dr, query.Select);
                         result.Add(obj);
                     }
                 }                

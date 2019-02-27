@@ -8,47 +8,51 @@ namespace pruebau.QueryBuilder
 {
     public class Query
     {
-        public List<QueryElement> SelectClause { get; set; }
-        public List<Query> FromClause { get; set; }
-        public QueryStatement WhereClause { get; set; }
+                public List<QueryElement> PreSelect { get; set; }
+        public List<QueryElement> Select { get; set; }
+        public List<Query> From { get; set; }
+        public QueryStatement Where { get; set; }
         public string Alias { get; set; }
         public string Name { get; set; }
-        public string GetQueryFrom()
+        public string GetFrom()
         {
-            string result = "";
             if (Name != null)
-            {
-                result = $" {Name} as {Alias ?? Name} ";                
-            }
+                return $"({GetQuery()}) as {Alias}";
             else
-            {
-                result = $"({GetQuery()}) as {Alias ?? Name}";
-            }
+                return $"{Name} as {Alias}";
+        }
+       public string GetQuery()
+        {
+            string result = "";         
+            result = "select";
+            result += string.Join(",\n", Select.Select(x => x.GetQuery()));
+            result += $"\nfrom " + string.Join(",\n", From.Select(x => x.GetFrom()));
+            result += string.Join(",\n", From.Select(x => $"{x.Name} as [{x.Alias}]"));
+            if (Where != null)
+                result += $"\n{Where.GetQuery()};";           
             return result;
         }
-        public string GetQuery()
+
+        internal void addFrom(Query table)
         {
-            string result = "";
-            if (Name != null)
+            if (From == null)
+                From = new List<Query>();
+            if (From.Count == 0)
             {
-                result = "select ";
-                result += string.Join(" , ", SelectClause.Select(x => x.GetQuery()));
-                result += $" from {Name} as {Alias} ";
-                if (FromClause != null)
-                    result += string.Join(" , ", FromClause.Select(x => $"{x.Name} as [{x.Alias ?? x.Name}]"));
-                if (WhereClause != null)
-                    result += " " + WhereClause.GetQuery();
+                if (table.Name == null) // es query
+                {
+                    From.Add(table);
+                }
+                else // es tabla
+                {
+                    From = table.From;
+                    PreSelect = table.PreSelect;
+                }
             }
             else
             {
-                result = "select ";
-                result += string.Join(" , ", SelectClause.Select(x => x.GetQuery()));
-                result += $" from " + string.Join(" , ", FromClause.Select(x => x.GetQueryFrom())); ;
-                result += string.Join(" , ", FromClause.Select(x => $"{x.Name} as [{x.Alias ?? x.Name}]"));
-                if (WhereClause != null)
-                    result += " " + WhereClause.GetQuery();
+                From.Add(table);
             }
-            return result;
-        } 
+        }
     }
 }

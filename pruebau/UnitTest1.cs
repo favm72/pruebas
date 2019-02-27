@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Xml;
 using System.Configuration;
 using System.Web.Script.Serialization;
+using pruebau.Model;
 
 namespace pruebau
 {
@@ -135,10 +136,15 @@ namespace pruebau
         [TestMethod]
         public void TestMethod11()
         {
-            var alumno = Model.Entities.AsQuery<Model.Entities.ALUMNO>();
+            /*var alumno = Model.Entities.AsQuery<Model.Entities.ALUMNO>();
             var lista = Model.Conecta.Obtener<Model.Entities.ALUMNO>(alumno);
             Model.Entities.ALUMNO x = new Model.Entities.ALUMNO();
-            
+            */
+            var alumno = new Entities.ALUMNO().AsQuery();
+            var query = new QueryBuilder.Query();
+            query.addFrom(alumno);
+            var lista = Conecta.Obtener<Entities.ALUMNO>(alumno);
+            Entities.ALUMNO x = new Entities.ALUMNO();
             Assert.AreEqual(null, null);
         }
     }
