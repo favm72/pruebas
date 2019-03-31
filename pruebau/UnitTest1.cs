@@ -147,5 +147,27 @@ namespace pruebau
             Entities.ALUMNO x = new Entities.ALUMNO();
             Assert.AreEqual(null, null);
         }
+
+        [TestMethod]
+        public void TestMethod12()
+        {
+            padre a = new padre();
+            padre b = new hijo();
+            padre f = new nieto();
+            hijo c = new hijo();
+            hijo d = new nieto();
+            nieto e = new nieto();
+
+            string mensaje = "";
+            mensaje += a.accion();
+            mensaje += "\n" + b.accion();
+            mensaje += "\n" + f.accion();
+            mensaje += "\n" + c.accion();
+            mensaje += "\n" + d.accion();
+            mensaje += "\n" + e.accion();
+
+            throw new Exception(mensaje);
+            Assert.AreEqual(null, null);
+        }
     }
 }

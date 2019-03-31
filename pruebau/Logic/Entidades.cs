@@ -45,11 +45,29 @@ namespace pruebau
     public class Glosa
     {
         public string key { get; set; }
-        public string value { get; set; }        
+        public string value { get; set; }
     }
 
     public class Result
     {
         public List<Glosa> glosas { get; set; }
+    }
+    public class padre
+    {
+        public virtual string accion() { return "padre"; }
+    }
+    public class hijo : padre
+    {
+        public override string accion()
+        {
+            return "hijo";
+        }
+    }
+    public class nieto : hijo
+    {
+        public override string accion()
+        {
+            return "nieto";
+        }
     }
 }
