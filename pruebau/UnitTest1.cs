@@ -8,6 +8,7 @@ using System.Xml;
 using System.Configuration;
 using System.Web.Script.Serialization;
 using pruebau.Model;
+using System.Threading.Tasks;
 
 namespace pruebau
 {
@@ -168,6 +169,27 @@ namespace pruebau
 
             throw new Exception(mensaje);
             Assert.AreEqual(null, null);
+        }
+        [TestMethod]
+        public async Task TestMethod13()
+        {
+            MyClass to_fill = new MyClass();
+            Func<Task> llenar_nombre = async () => {
+                Console.WriteLine("Start llenar nombre");
+                await Task.Delay(2000);
+                to_fill.Nombre = "mynombre";
+                Console.WriteLine("Fill Nombre");
+            };
+            Func<Task> llenar_apellido = async () => {
+                Console.WriteLine("Start llenar Apellido");
+                await Task.Delay(1000);
+                to_fill.Apellido = "myapellido";
+                Console.WriteLine("Fill apellido");
+            };
+            
+            await Task.WhenAll(llenar_nombre(), llenar_apellido());
+            Console.WriteLine("After both methods");
+            Assert.AreEqual("mynombre", to_fill.Nombre);
         }
     }
 }

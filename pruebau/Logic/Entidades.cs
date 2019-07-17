@@ -65,7 +65,7 @@ namespace pruebau
     }
     public class nieto : hijo
     {
-        public override string accion()
+        public string accion()
         {
             return "nieto";
         }
