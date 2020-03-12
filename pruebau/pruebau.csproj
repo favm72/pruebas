@@ -70,6 +70,8 @@
     <Compile Include="Logic\Cliente.cs" />
     <Compile Include="Model\Conecta.cs" />
     <Compile Include="Model\Entities.cs" />
+    <Compile Include="Model\Reflec.cs" />
+    <Compile Include="Model\SecurityDA.cs" />
     <Compile Include="QueryBuilder\QueryStatement.cs" />
     <Compile Include="QueryBuilder\QueryTable.cs" />
     <Compile Include="QueryBuilder\QueryElement.cs" />

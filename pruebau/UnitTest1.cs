@@ -9,12 +9,20 @@ using System.Configuration;
 using System.Web.Script.Serialization;
 using pruebau.Model;
 using System.Threading.Tasks;
+using System.Text;
 
 namespace pruebau
 {
     [TestClass]
     public class UnitTest1
     {
+        [TestMethod]
+        public void TestMethod0()
+        {
+            string input = null;
+            string primeraletra = input ?? " ".Substring(0, 1);
+            Assert.AreEqual(primeraletra, "");
+        }
         [TestMethod]
         public void TestMethod1()
         {
@@ -47,7 +55,7 @@ namespace pruebau
         public void TestMethod5()
         {
             string text = null;
-            int num = text?.Length ?? 0;
+            int num = text?.Length?? 0;
             Assert.AreEqual(0, num);
         }
         [TestMethod]
@@ -191,5 +199,70 @@ namespace pruebau
             Console.WriteLine("After both methods");
             Assert.AreEqual("mynombre", to_fill.Nombre);
         }
-    }
+
+		[TestMethod]
+		public void TestMethod14()
+		{
+			string plantilla = "plantilla {g}";
+			string copia = plantilla;
+			copia = copia.Replace("{g}", "hola");
+			Console.WriteLine(plantilla);
+			Console.WriteLine(copia);
+			Assert.AreEqual(0, 0);
+		}
+
+
+		[TestMethod]
+		public void TestMethod15()
+		{
+			string allowed = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+			int len = 8;
+			Random rnd = new Random();
+			string result = "";
+			for (int i = 0; i < len; i++)
+			{
+				int chr = rnd.Next(1, allowed.Length + 1);
+				result += allowed[chr];
+			}
+			Console.WriteLine(result);
+			Assert.AreEqual(0, 0);
+		}
+
+		[TestMethod]
+		public void TestEncrypt()
+		{			
+			string password = "3gHjsFWfGQXeQcGz1myE/A==";
+			string decrypted = SecurityDA.Decrypt(password);
+			Console.WriteLine(decrypted);
+			Assert.AreEqual(0, 0);
+		}
+
+		[TestMethod]
+		public void TestReflection()
+		{
+			Reflec obj = new Reflec();
+			obj.Campo1 = "fabio";
+			obj.Campo2 = "asd";
+			Animal obj2 = (Animal)obj;
+			
+			foreach (var propname in new List<string>() { "Campo1", "Nombre", "Modelo", "Accion", "Correr" })
+			{
+				System.Reflection.PropertyInfo prop = obj2.GetType().GetProperty(propname, System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+			}
+			//Console.WriteLine();
+			Assert.AreEqual(0, 0);
+		}
+
+		[TestMethod]
+		public void TestEncoding()
+		{
+			var win = Encoding.GetEncoding("Windows-1251");
+			var u08 = Encoding.GetEncoding("UTF-8");
+			var u32 = Encoding.GetEncoding("UTF-32");
+			var u07 = Encoding.GetEncoding("UTF-7");
+			var aci = Encoding.GetEncoding("ASCII");
+			//Console.WriteLine();
+			Assert.AreEqual(0, 0);
+		}
+	}
 }
